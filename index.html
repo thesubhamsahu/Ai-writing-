@@ -385,6 +385,7 @@
         let cursor = displayBox.querySelector(".blinking-cursor");
         let isPlaying = false;
         let displayInterval;
+        const typingFormElement = document.querySelector(".typing-form"); // Get the typing form element
 
         function displayText() {
             if (currentIndex < textArray.length) {
@@ -393,7 +394,12 @@
                 displayBox.insertBefore(newText, cursor);
                 currentIndex++;
 
-                displayBox.scrollTop = displayBox.scrollHeight;
+                // Check if the animation box is touching the typing form
+                if (displayBox.getBoundingClientRect().bottom >= typingFormElement.getBoundingClientRect().top) {
+                    chatContainer.scrollTo(0, chatContainer.scrollHeight);
+                } else {
+                    displayBox.scrollTop = displayBox.scrollHeight;
+                }
 
                 const currentWord = textArray[currentIndex - 1];
                 let delay = normalSpeed;
