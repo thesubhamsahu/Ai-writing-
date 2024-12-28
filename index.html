@@ -397,8 +397,6 @@
                 // Check if the animation box is touching the typing form
                 if (displayBox.getBoundingClientRect().bottom >= typingFormElement.getBoundingClientRect().top) {
                     chatContainer.scrollTo(0, chatContainer.scrollHeight);
-                } else {
-                    displayBox.scrollTop = displayBox.scrollHeight;
                 }
 
                 const currentWord = textArray[currentIndex - 1];
