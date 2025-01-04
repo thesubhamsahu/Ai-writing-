@@ -275,6 +275,9 @@
     let wordsToOverrideDict = loadWordsToOverrideDict(defaultSettings.wordsToOverride);
 
     function highlightWord(word) {
+        // Remove * and # characters from anywhere in the word
+        word = word.replace(/\*/g, '').replace(/#/g, '');
+
         const doc = nlp(word);
         const adjectives = doc.adjectives().out('array');
         const nouns = doc.match("#Noun").not("#Pronoun").not("#Possessive").out('array');
