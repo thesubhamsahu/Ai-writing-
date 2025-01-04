@@ -276,7 +276,7 @@
 
     function highlightWord(word) {
         // Remove * and # characters from anywhere in the word
-        word = word.replace(/\*/g, '').replace(/#/g, '');
+        // word = word.replace(/\*/g, '').replace(/#/g, '');
 
         const doc = nlp(word);
         const adjectives = doc.adjectives().out('array');
