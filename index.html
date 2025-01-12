@@ -186,7 +186,8 @@
         }
 
         .send-button,
-        .speed-control-button {
+        .speed-control-button,
+        .prompt-change-button {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 4px;
@@ -198,18 +199,21 @@
         }
 
         body.light_mode .send-button,
-        body.light_mode .speed-control-button {
+        body.light_mode .speed-control-button,
+        body.light_mode .prompt-change-button {
             background-color: #ccc;
             color: #000;
         }
 
         .send-button:hover,
-        .speed-control-button:hover {
+        .speed-control-button:hover,
+        .prompt-change-button:hover {
             background-color: #555;
         }
 
         body.light_mode .send-button:hover,
-        body.light_mode .speed-control-button:hover {
+        body.light_mode .speed-control-button:hover,
+        body.light_mode .prompt-change-button:hover {
             background-color: #aaa;
         }
 
@@ -271,6 +275,7 @@
 </div>
 <form class="typing-form">
     <button type="button" class="speed-control-button" id="decrease-speed">speed-</button>
+    <button type="button" class="prompt-change-button" id="prompt-change">Essay</button>
     <input type="text" class="typing-input" placeholder="Type a message..."/>
     <button type="submit" class="send-button">Send</button>
     <button type="button" class="speed-control-button" id="increase-speed">speed+</button>
@@ -280,11 +285,19 @@
     const animationContainer = document.querySelector(".animation-container");
     const decreaseSpeedButton = document.getElementById("decrease-speed");
     const increaseSpeedButton = document.getElementById("increase-speed");
+    const promptChangeButton = document.getElementById("prompt-change");
 
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     let isResponseGenerating = false;
     let INITIAL_PROMPT = `Write an essay on topic in 800 words in paragraphs`;
+
+    const promptOptions = [
+        { label: "Essay", prompt: `Write an essay on topic in 800 words in paragraphs` },
+        { label: "Letter", prompt: `Write a letter on the topic` },
+        { label: "Q&A", prompt: `Write 5 long questions on the topic, Write each question inside [ question ] followed by an answer in 300 words` },
+    ];
+    let currentPromptIndex = 0;
 
     const defaultSettings = {
         adjectiveEnabled: true,
@@ -500,6 +513,13 @@
 
     increaseSpeedButton.addEventListener('click', () => {
         normalSpeed = Math.max(100, normalSpeed - 100);
+    });
+
+    promptChangeButton.addEventListener('click', () => {
+        currentPromptIndex = (currentPromptIndex + 1) % promptOptions.length;
+        const selectedPrompt = promptOptions[currentPromptIndex];
+        INITIAL_PROMPT = selectedPrompt.prompt;
+        promptChangeButton.textContent = selectedPrompt.label;
     });
 
     let isLightMode = true;
