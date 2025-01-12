@@ -185,7 +185,8 @@
             background-color: inherit;
         }
 
-        .send-button {
+        .send-button,
+        .speed-control-button {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 4px;
@@ -196,16 +197,19 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        body.light_mode .send-button {
+        body.light_mode .send-button,
+        body.light_mode .speed-control-button {
             background-color: #ccc;
             color: #000;
         }
 
-        .send-button:hover {
+        .send-button:hover,
+        .speed-control-button:hover {
             background-color: #555;
         }
 
-        body.light_mode .send-button:hover {
+        body.light_mode .send-button:hover,
+        body.light_mode .speed-control-button:hover {
             background-color: #aaa;
         }
 
@@ -266,12 +270,16 @@
 <div class="animation-container">
 </div>
 <form class="typing-form">
+    <button type="button" class="speed-control-button" id="decrease-speed">speed-</button>
     <input type="text" class="typing-input" placeholder="Type a message..."/>
     <button type="submit" class="send-button">Send</button>
+    <button type="button" class="speed-control-button" id="increase-speed">speed+</button>
 </form>
 <script>
     const typingForm = document.querySelector(".typing-form");
     const animationContainer = document.querySelector(".animation-container");
+    const decreaseSpeedButton = document.getElementById("decrease-speed");
+    const increaseSpeedButton = document.getElementById("increase-speed");
 
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
@@ -344,8 +352,6 @@
     }
 
     let normalSpeed = 900;
-    let punctuationSpeed = 1600;
-    let fullStopSpeed = 2200;
     let displayInterval;
     let currentAnimationBox = null;
 
@@ -361,7 +367,33 @@
                 currentIndex++;
 
                 if (displayBox.scrollHeight > displayBox.clientHeight) {
-                    createNewPageAndContinue(textArray.slice(currentIndex -1).join(" "));
+                    // Get the words of the last line
+                    let lastLineWords = [];
+                    let tempDiv = document.createElement('div');
+                    tempDiv.style.cssText = `width: ${displayBox.offsetWidth}px; white-space: normal; word-break: break-word; font: inherit;`;
+                    for (let i = 0; i < displayBox.children.length -1; i++) { // Exclude the cursor
+                        tempDiv.appendChild(displayBox.children[i].cloneNode(true));
+                    }
+
+                    let lastChild;
+                    do {
+                        lastChild = tempDiv.lastChild;
+                        if (lastChild) {
+                            lastLineWords.unshift(lastChild.textContent.trim());
+                            tempDiv.removeChild(lastChild);
+                        }
+                    } while (tempDiv.scrollHeight > tempDiv.clientHeight && lastChild);
+
+                    const remainingInCurrentBox = textArray.slice(0, currentIndex - lastLineWords.length);
+                    displayBox.innerHTML = '';
+                    remainingInCurrentBox.forEach(word => {
+                        const newText = document.createElement("span");
+                        newText.innerHTML = highlightWord(word) + " ";
+                        displayBox.appendChild(newText);
+                    });
+                    displayBox.appendChild(cursor);
+
+                    createNewPageAndContinue(lastLineWords.join(" ") + " " + textArray.slice(currentIndex).join(" "));
                     return;
                 }
 
@@ -369,10 +401,7 @@
                 let delay = normalSpeed;
 
                 if (currentWord && currentWord.includes(".")) {
-                    delay = fullStopSpeed;
                     dimPreviousText(displayBox, currentIndex);
-                } else if (currentWord && currentWord.includes(",")) {
-                    delay = punctuationSpeed;
                 }
 
                 clearInterval(displayInterval);
@@ -463,6 +492,14 @@
 
         typingForm.reset();
         fetchResponse(inputText);
+    });
+
+    decreaseSpeedButton.addEventListener('click', () => {
+        normalSpeed = Math.min(2000, normalSpeed + 100);
+    });
+
+    increaseSpeedButton.addEventListener('click', () => {
+        normalSpeed = Math.max(100, normalSpeed - 100);
     });
 
     let isLightMode = true;
