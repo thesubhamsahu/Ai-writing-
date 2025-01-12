@@ -16,8 +16,9 @@
             color: #fff;
             display: flex;
             flex-direction: column;
-            height: 95vh; /* Decreased height by 5% */
+            height: 95vh;
             transition: background-color 0.3s ease, color 0.3s ease;
+            overflow: hidden;
         }
 
         body.light_mode {
@@ -27,7 +28,7 @@
 
         header {
             display: flex;
-            justify-content: flex-end; /* Align to the right now that buttons are removed */
+            justify-content: flex-end;
             align-items: center;
             padding: 1rem;
             background-color: #1e1e1e;
@@ -42,7 +43,7 @@
         .header-buttons {
              display: flex;
              align-items: center;
-              flex: 1; /* Allow header buttons to take up available space */
+              flex: 1;
              gap: 10px;
          }
 
@@ -58,12 +59,33 @@
                gap: 5px;
         }
 
-        .chat-container {
+        .animation-container {
             flex: 1;
-            overflow-y: auto;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: row;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 30px; /* Add margin to create space above typing form */
+        }
+
+        .animation-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .animation-page {
+            scroll-snap-align: start;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
             padding: 1rem;
-            display: flex; /* Enable flex layout for chat container */
-            flex-direction: column; /* Arrange message rows vertically */
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .message-row {
@@ -71,29 +93,29 @@
             flex-wrap: wrap;
             margin-bottom: 10px;
             gap: 10px;
-            flex-direction: column; /* Arrange message box vertically */
-            flex-grow: 1; /* Allow message row to grow and take available space */
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .message-box {
-            font-family: Arial, sans-serif; /* Font match */
+            font-family: Arial, sans-serif;
             display: flex;
-            align-items: start; /* Align items to the start for better text flow */
-            justify-content: start; /* Align content to the start */
+            align-items: start;
+            justify-content: start;
             background-color: #333;
             border-radius: 8px;
-            padding: 0.75rem 1rem; /* Increased padding for better spacing */
+            padding: 0.75rem 1rem;
             color: #fff;
             transition: background-color 0.3s ease, color 0.3s ease;
             word-break: break-word;
-            width: calc(100%); /* Make message box take full width */
+            width: calc(100%);
             box-sizing: border-box;
-            min-height: 40px; /* Minimum height */
-             font-size: 1rem; /* Text size match */
-             line-height: 1.4; /* Improved line height for readability */
-             white-space: pre-wrap; /* Preserve formatting and handle wrapping */
-             position: relative; /* For positioning the cursor */
-             flex-grow: 1; /* Allow message box to grow and take available space in the row */
+            min-height: 40px;
+             font-size: 1rem;
+             line-height: 1.4;
+             white-space: pre-wrap;
+             position: relative;
+             flex-grow: 1;
         }
 
         body.light_mode .message-box {
@@ -102,16 +124,16 @@
         }
 
         .input-box {
-            font-family: Arial, sans-serif;  /* Font match */
+            font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #1e1e1e;
             border-radius: 8px;
             padding: 0.5rem 1rem;
-            width: calc(100%); /* Make input box take full width */
+            width: calc(100%);
             box-sizing: border-box;
-            min-height: 40px; /* Minimum height */
+            min-height: 40px;
             transition: background-color 0.3s ease;
         }
 
@@ -127,10 +149,10 @@
             box-sizing: border-box;
             word-wrap: break-word;
             white-space: pre-wrap;
-            font-family: inherit; /* Inherit font style */
-            font-size: 1rem; /* Text size match */
+            font-family: inherit;
+            font-size: 1rem;
             height: 100%;
-            overflow-y: auto; /* Enable vertical scrolling if needed */
+            overflow-y: auto;
         }
 
         .input-box .editable-div::placeholder {
@@ -145,7 +167,6 @@
             background-color: #1e1e1e;
             gap: 0.5rem;
             transition: background-color 0.3s ease;
-            /* Stick to the bottom */
             position: sticky;
             bottom: 0;
         }
@@ -188,23 +209,23 @@
             background-color: #aaa;
         }
 
-        .adjective { color: hotpink; margin-right: 0.2em; } /* Add space after adjective */
-        .noun { color: red; margin-right: 0.2em; } /* Add space after noun */
-        .adverb { color: green; margin-right: 0.2em; } /* Add space after adverb */
-        .verb { color: blue; margin-right: 0.2em; } /* Add space after verb */
-        .conjunction { color: purple; margin-right: 0.2em; } /* Add space after conjunction */
+        .adjective { color: hotpink; margin-right: 0.2em; }
+        .noun { color: red; margin-right: 0.2em; }
+        .adverb { color: green; margin-right: 0.2em; }
+        .verb { color: blue; margin-right: 0.2em; }
+        .conjunction { color: purple; margin-right: 0.2em; }
         .blinking-cursor {
             display: inline-block;
             width: 2px;
-            height: 1em; /* Relative to the font size */
-            background-color: #fff; /* Default to white */
+            height: 1em;
+            background-color: #fff;
             margin-left: 2px;
-            animation: blink 1s steps(2, start) infinite, opacityBlink 1s linear infinite alternate; /* Added opacity animation */
+            animation: blink 1s steps(2, start) infinite, opacityBlink 1s linear infinite alternate;
             position: absolute;
         }
 
         body.light_mode .blinking-cursor {
-            background-color: #000; /* Set to black in light mode */
+            background-color: #000;
         }
 
         @keyframes blink {
@@ -218,19 +239,21 @@
             to { opacity: 0; }
         }
         .dimmed-text {
-            opacity: 0.52; /* Reduced opacity for dimming by 20% */
-            transition: opacity 0.3s ease-in-out; /* Smooth transition */
+            opacity: 0.52;
+            transition: opacity 0.3s ease-in-out;
         }
         .animation-box {
             border: 2px solid #ccc;
             padding: 10px;
-            font-size: 1.12rem; /* Increased font size by 3% */
+            font-size: 19px;
             overflow-y: auto;
             white-space: pre-wrap;
             position: relative;
-            background-color: inherit; /* Inherit background */
-            color: inherit; /* Inherit text color */
-            margin-top: 10px; /* Add some space above the animation box */
+            background-color: inherit;
+            color: inherit;
+            height: 100%;
+            box-sizing: border-box;
+            width: 100%;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/compromise@14.8.1/builds/compromise.min.js"></script>
@@ -240,7 +263,7 @@
     <div class="header-buttons">
     </div>
 </header>
-<div class="chat-container">
+<div class="animation-container">
 </div>
 <form class="typing-form">
     <input type="text" class="typing-input" placeholder="Type a message..."/>
@@ -248,13 +271,9 @@
 </form>
 <script>
     const typingForm = document.querySelector(".typing-form");
-    const chatContainer = document.querySelector(".chat-container");
-    // Removed themeToggleButton and deleteChatButton
-    // const themeToggleButton = document.querySelector("#theme-toggle-button");
-    // const deleteChatButton = document.querySelector("#delete-chat-button");
-    // const themeToggleIcon = themeToggleButton.querySelector("i");
+    const animationContainer = document.querySelector(".animation-container");
 
-    const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg"; // Replace with your API key
+    const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     let isResponseGenerating = false;
     let INITIAL_PROMPT = `Write an essay on topic in 800 words in paragraphs`;
@@ -285,9 +304,6 @@
     let wordsToOverrideDict = loadWordsToOverrideDict(defaultSettings.wordsToOverride);
 
     function highlightWord(word) {
-        // Remove * and # characters from anywhere in the word
-        // word = word.replace(/\*/g, '').replace(/#/g, '');
-
         const doc = nlp(word);
         const adjectives = doc.adjectives().out('array');
         const nouns = doc.match("#Noun").not("#Pronoun").not("#Possessive").out('array');
@@ -312,12 +328,6 @@
         return word;
     }
 
-    const createMessageBox = () => {
-        const div = document.createElement("div");
-        div.className = "message-box";
-        return div;
-    };
-
     const createAnimationBox = () => {
         const div = document.createElement("div");
         div.className = "animation-box";
@@ -327,100 +337,32 @@
         return div;
     };
 
-    // Add this for testing:
-    document.addEventListener('DOMContentLoaded', () => {
-        const testCursor = document.querySelector('.blinking-cursor');
-        if (testCursor) {
-            console.log("Cursor element found and should be blinking.");
-            const computedStyle = window.getComputedStyle(testCursor);
-            console.log("Animation style:", computedStyle.animation);
-        } else {
-            console.log("Cursor element not found.");
-        }
-    });
-
-    const createInputBox = (placeholder = '') => {
-        const div = document.createElement('div');
-        div.className = 'input-box';
-        const editableDiv = document.createElement('div');
-        editableDiv.className = 'editable-div';
-        editableDiv.setAttribute('contenteditable', 'true');
-        editableDiv.setAttribute('placeholder', placeholder);
-        div.appendChild(editableDiv);
-
-        editableDiv.addEventListener('input', () => {
-            const text = editableDiv.innerText;
-            const words = text.split(/\s+/); // Split by spaces
-            const highlightedWords = words.map(word => highlightWord(word)).join(' ');
-            editableDiv.innerHTML = highlightedWords;
-
-            // Keep the cursor at the end of the text
-            const range = document.createRange();
-            range.selectNodeContents(editableDiv);
-            range.collapse(false);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-        });
-
-        editableDiv.addEventListener('keydown', handleEnterPress);
+    const createAnimationPage = () => {
+        const div = document.createElement("div");
+        div.className = "animation-page";
         return div;
-    };
-
-    function handleEnterPress(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            const currentInputBox = event.target.closest('.input-box');
-            const messageRow = currentInputBox.closest('.message-row');
-            if (messageRow) {
-                const allInputBoxes = Array.from(messageRow.querySelectorAll('.input-box'));
-                const currentIndex = allInputBoxes.indexOf(currentInputBox);
-                if (currentIndex < allInputBoxes.length - 1) {
-                    const nextInputBox = allInputBoxes[currentIndex + 1].querySelector('.editable-div');
-                    nextInputBox.focus();
-                } else {
-                    const nextRow = messageRow.nextElementSibling;
-                    if (nextRow) {
-                        const nextInput = nextRow.querySelector('.input-box .editable-div');
-                        if (nextInput) nextInput.focus();
-                    }
-                }
-            }
-        }
-    }
-
-    const addMessageRow = (isUser, content) => {
-        const rowDiv = document.createElement("div");
-        rowDiv.className = "message-row";
-        const messageBox = createMessageBox();
-        messageBox.textContent = content;
-        rowDiv.appendChild(messageBox);
-        chatContainer.appendChild(rowDiv);
-        chatContainer.scrollTo(0, chatContainer.scrollHeight);
     }
 
     let normalSpeed = 900;
     let punctuationSpeed = 1600;
     let fullStopSpeed = 2200;
-    let isPlaying = false;
     let displayInterval;
+    let currentAnimationBox = null;
 
     function animateMessageBox(displayBox, textArray) {
         let currentIndex = 0;
         let cursor = displayBox.querySelector(".blinking-cursor");
-        let isPlaying = false;
-        let displayInterval;
 
         function displayText() {
             if (currentIndex < textArray.length) {
                 const newText = document.createElement("span");
-                newText.innerHTML = highlightWord(textArray[currentIndex]) + " "; // Use innerHTML and highlight
+                newText.innerHTML = highlightWord(textArray[currentIndex]) + " ";
                 displayBox.insertBefore(newText, cursor);
                 currentIndex++;
 
-                // Check if the animation box is overflowing the visible chat container
-                if (displayBox.getBoundingClientRect().bottom > chatContainer.clientHeight) {
-                    chatContainer.scrollTo(0, chatContainer.scrollHeight);
+                if (displayBox.scrollHeight > displayBox.clientHeight) {
+                    createNewPageAndContinue(textArray.slice(currentIndex -1).join(" "));
+                    return;
                 }
 
                 const currentWord = textArray[currentIndex - 1];
@@ -428,7 +370,6 @@
 
                 if (currentWord && currentWord.includes(".")) {
                     delay = fullStopSpeed;
-                    // Dim previous text including the full stop
                     dimPreviousText(displayBox, currentIndex);
                 } else if (currentWord && currentWord.includes(",")) {
                     delay = punctuationSpeed;
@@ -439,8 +380,9 @@
             } else {
                 clearInterval(displayInterval);
                 if (cursor) {
-                    cursor.remove(); // Remove cursor when done
+                    cursor.remove();
                 }
+                currentAnimationBox = null;
             }
         }
 
@@ -453,34 +395,32 @@
         }
 
         function startDisplay() {
-            clearInterval(displayInterval); // Clear any existing interval
+            clearInterval(displayInterval);
             displayInterval = setInterval(displayText, normalSpeed);
         }
 
-        function togglePlayPause() {
-            if (isPlaying) {
-                clearInterval(displayInterval);
-                isPlaying = false;
-            } else {
-                startDisplay();
-                isPlaying = true;
-            }
-        }
-
-        // Start animation automatically
         startDisplay();
     }
 
+    const createNewPageAndContinue = (remainingText) => {
+        const newPage = createAnimationPage();
+        const newBox = createAnimationBox();
+        newPage.appendChild(newBox);
+        animationContainer.appendChild(newPage);
+        animationContainer.scrollLeft = animationContainer.scrollWidth;
+        animateMessageBox(newBox, remainingText.split(" "));
+        currentAnimationBox = newBox;
+    };
+
     const fetchResponse = async (inputText) => {
         isResponseGenerating = true;
-        // INITIAL_PROMPT = ``; // Removed this line
 
-        // Create the bot's message structure *before* the API call
-        const rowDiv = document.createElement("div");
-        rowDiv.className = "message-row";
+        const animationPage = createAnimationPage();
         const animationBox = createAnimationBox();
-        rowDiv.appendChild(animationBox);
-        chatContainer.appendChild(rowDiv); // Append the structure immediately
+        animationPage.appendChild(animationBox);
+        animationContainer.appendChild(animationPage);
+        animationContainer.scrollLeft = animationContainer.scrollWidth;
+        currentAnimationBox = animationBox;
 
         try {
             const response = await fetch(API_URL, {
@@ -499,14 +439,15 @@
             if (!response.ok) throw new Error(data.error.message);
 
             let apiResponse = data.candidates[0].content.parts[0].text;
-            animateMessageBox(animationBox, apiResponse.split(" ")); // Populate the existing box
+            animateMessageBox(animationBox, apiResponse.split(" "));
 
         } catch (error) {
-            // Handle error in the existing box or create a new one
-            animationBox.textContent = `Error: ${error.message}`;
-             const cursor = animationBox.querySelector(".blinking-cursor");
-            if (cursor) {
-                cursor.remove();
+            if (currentAnimationBox) {
+                currentAnimationBox.textContent = `Error: ${error.message}`;
+                const cursor = currentAnimationBox.querySelector(".blinking-cursor");
+                if (cursor) {
+                    cursor.remove();
+                }
             }
         } finally {
             isResponseGenerating = false;
@@ -524,19 +465,28 @@
         fetchResponse(inputText);
     });
 
-    let isLightMode = true; // Keep the light mode state
-    // Removed the event listener for themeToggleButton
-    // themeToggleButton.addEventListener("click", () => {
-    //     isLightMode = !isLightMode;
-    //     document.body.classList.toggle("light_mode", isLightMode);
-    //     themeToggleIcon.classList.toggle("fa-moon", isLightMode);
-    //     themeToggleIcon.classList.toggle("fa-sun", !isLightMode);
-    // });
+    let isLightMode = true;
 
-    // Removed the event listener for deleteChatButton
-    // deleteChatButton.addEventListener("click", () => {
-    //     chatContainer.innerHTML = "";
-    // });
+    let touchStartX = 0;
+    let currentPageIndex = 0;
+    animationContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    });
+
+    animationContainer.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const swipeDistance = touchEndX - touchStartX;
+        const pageWidth = animationContainer.offsetWidth;
+
+        if (Math.abs(swipeDistance) > 50) {
+            if (swipeDistance < 0) {
+                currentPageIndex = Math.min(currentPageIndex + 1, animationContainer.children.length - 1);
+            } else {
+                currentPageIndex = Math.max(0, currentPageIndex - 1);
+            }
+            animationContainer.scrollLeft = currentPageIndex * pageWidth;
+        }
+    });
 </script>
 </body>
 </html>
