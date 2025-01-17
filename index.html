@@ -21,11 +21,6 @@
             overflow: hidden;
         }
 
-        body.light_mode {
-            background-color: #fff;
-            color: #000;
-        }
-
         header {
             display: flex;
             justify-content: flex-end;
@@ -33,11 +28,6 @@
             padding: 1rem;
             background-color: #1e1e1e;
             transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        body.light_mode header {
-            background-color: #eee;
-            color: #000;
         }
 
         .header-buttons {
@@ -118,11 +108,6 @@
              flex-grow: 1;
         }
 
-        body.light_mode .message-box {
-            background-color: #eee;
-            color: #000;
-        }
-
         .input-box {
             font-family: Arial, sans-serif;
             display: flex;
@@ -135,10 +120,6 @@
             box-sizing: border-box;
             min-height: 40px;
             transition: background-color 0.3s ease;
-        }
-
-        body.light_mode .input-box {
-            background-color: #eee;
         }
 
         .input-box .editable-div {
@@ -171,10 +152,6 @@
             bottom: 0;
         }
 
-        body.light_mode .typing-form {
-            background-color: #eee;
-        }
-
         .typing-input {
             flex: 1;
             padding: 0.5rem;
@@ -198,23 +175,10 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        body.light_mode .send-button,
-        body.light_mode .speed-control-button,
-        body.light_mode .prompt-change-button {
-            background-color: #ccc;
-            color: #000;
-        }
-
         .send-button:hover,
         .speed-control-button:hover,
         .prompt-change-button:hover {
             background-color: #555;
-        }
-
-        body.light_mode .send-button:hover,
-        body.light_mode .speed-control-button:hover,
-        body.light_mode .prompt-change-button:hover {
-            background-color: #aaa;
         }
 
         .adjective { color: hotpink; margin-right: 0.2em; }
@@ -230,10 +194,6 @@
             margin-left: 2px;
             animation: blink 1s steps(2, start) infinite, opacityBlink 1s linear infinite alternate;
             position: absolute;
-        }
-
-        body.light_mode .blinking-cursor {
-            background-color: #000;
         }
 
         @keyframes blink {
@@ -263,10 +223,102 @@
             box-sizing: border-box;
             width: 100%;
         }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #fff;
+            }
+
+            header {
+                background-color: #1e1e1e;
+                color: #fff;
+            }
+
+            .message-box {
+                background-color: #333;
+                color: #fff;
+            }
+
+            .input-box {
+                background-color: #1e1e1e;
+            }
+
+            .typing-form {
+                background-color: #1e1e1e;
+            }
+
+            .send-button,
+            .speed-control-button,
+            .prompt-change-button {
+                background-color: #333;
+                color: #fff;
+            }
+
+            .send-button:hover,
+            .speed-control-button:hover,
+            .prompt-change-button:hover {
+                background-color: #555;
+            }
+
+            .adjective { color: lightpink; }
+            .noun { color: lightcoral; }
+            .adverb { color: lightgreen; }
+            .verb { color: lightblue; }
+            .conjunction { color: plum; }
+
+            .blinking-cursor {
+                background-color: #fff;
+            }
+        }
+
+        /* Light mode styles */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #fff;
+                color: #000;
+            }
+
+            header {
+                background-color: #eee;
+                color: #000;
+            }
+
+            .message-box {
+                background-color: #eee;
+                color: #000;
+            }
+
+            .input-box {
+                background-color: #eee;
+            }
+
+            .typing-form {
+                background-color: #eee;
+            }
+
+            .send-button,
+            .speed-control-button,
+            .prompt-change-button {
+                background-color: #ccc;
+                color: #000;
+            }
+
+            .send-button:hover,
+            .speed-control-button:hover,
+            .prompt-change-button:hover {
+                background-color: #aaa;
+            }
+
+            .blinking-cursor {
+                background-color: #000;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/compromise@14.8.1/builds/compromise.min.js"></script>
 </head>
-<body class="light_mode">
+<body>
 <header>
     <div class="header-buttons">
     </div>
@@ -522,8 +574,6 @@
         INITIAL_PROMPT = selectedPrompt.prompt;
         promptChangeButton.textContent = selectedPrompt.label;
     });
-
-    let isLightMode = true;
 
     let touchStartX = 0;
     let currentPageIndex = 0;
