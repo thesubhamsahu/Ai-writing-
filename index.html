@@ -342,7 +342,7 @@
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     let isResponseGenerating = false;
-    let INITIAL_PROMPT = `Write an essay on topic in 800 words in paragraphs`;
+    let INITIAL_PROMPT = `Write an essay on topic in 800 words in paragraphs, use if necessary Anicdote, quotes, historical example, etc.`;
 
     const promptOptions = [
         { label: "Essay", prompt: `Write an essay on topic in 800 words in paragraphs` },
