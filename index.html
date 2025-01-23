@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
             height: 95vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color: 0.3s ease;
             overflow: hidden;
         }
 
@@ -27,7 +27,7 @@
             align-items: center;
             padding: 1rem;
             background-color: #1e1e1e;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color: 0.3s ease;
         }
 
         .header-buttons {
@@ -127,7 +127,7 @@
             outline: none;
             color: inherit;
             width: 100%;
-            box-sizing: border-box;
+            box-sizing: box-sizing;
             word-wrap: break-word;
             white-space: pre-wrap;
             font-family: inherit;
@@ -228,7 +228,7 @@
         /* Speed popup styles */
         .speed-popup {
             position: absolute;
-            bottom: 100%; /* Position above the button */
+            bottom: calc(100% + 10px); /* Increased space to 10px */
             left: 50%;
             transform: translateX(-50%);
             background-color: #555;
