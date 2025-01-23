@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
             height: 95vh;
-            transition: background-color 0.3s ease, color: 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             overflow: hidden;
         }
 
@@ -27,7 +27,7 @@
             align-items: center;
             padding: 1rem;
             background-color: #1e1e1e;
-            transition: background-color 0.3s ease, color: 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .header-buttons {
@@ -96,7 +96,7 @@
             border-radius: 8px;
             padding: 0.75rem 1rem;
             color: #fff;
-            transition: background-color 0.3s ease, color: 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             word-break: break-word;
             width: calc(100%);
             box-sizing: border-box;
@@ -117,7 +117,7 @@
             border-radius: 8px;
             padding: 0.5rem 1rem;
             width: calc(100%);
-            box-sizing: box-sizing;
+            box-sizing: border-box;
             min-height: 40px;
             transition: background-color 0.3s ease;
         }
@@ -127,7 +127,7 @@
             outline: none;
             color: inherit;
             width: 100%;
-            box-sizing: box-sizing;
+            box-sizing: border-box;
             word-wrap: break-word;
             white-space: pre-wrap;
             font-family: inherit;
@@ -172,8 +172,7 @@
             background-color: #333;
             color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease, color: 0.3s ease;
-            position: relative; /* For positioning the popup */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .send-button:hover,
@@ -225,29 +224,6 @@
             width: 100%;
         }
 
-        /* Speed popup styles */
-        .speed-popup {
-            position: absolute;
-            bottom: calc(100% + 10px); /* Increased space to 10px */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #555;
-            color: #fff;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .speed-popup.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-
         /* Dark mode styles */
         @media (prefers-color-scheme: dark) {
             body {
@@ -295,10 +271,6 @@
             .blinking-cursor {
                 background-color: #fff;
             }
-             .speed-popup {
-                background-color: #555;
-                color: #fff;
-            }
         }
 
         /* Light mode styles */
@@ -342,10 +314,6 @@
             .blinking-cursor {
                 background-color: #000;
             }
-             .speed-popup {
-                background-color: #ccc;
-                color: #000;
-            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/compromise@14.8.1/builds/compromise.min.js"></script>
@@ -358,17 +326,11 @@
 <div class="animation-container">
 </div>
 <form class="typing-form">
-    <button type="button" class="speed-control-button" id="decrease-speed">
-        speed-
-        <div class="speed-popup" id="speed-popup-decrease"></div>
-    </button>
+    <button type="button" class="speed-control-button" id="decrease-speed">speed-</button>
     <button type="button" class="prompt-change-button" id="prompt-change">Essay</button>
     <input type="text" class="typing-input" placeholder="Type a message..."/>
     <button type="submit" class="send-button">Send</button>
-    <button type="button" class="speed-control-button" id="increase-speed">
-        speed+
-        <div class="speed-popup" id="speed-popup-increase"></div>
-    </button>
+    <button type="button" class="speed-control-button" id="increase-speed">speed+</button>
 </form>
 <script>
     const typingForm = document.querySelector(".typing-form");
@@ -376,8 +338,6 @@
     const decreaseSpeedButton = document.getElementById("decrease-speed");
     const increaseSpeedButton = document.getElementById("increase-speed");
     const promptChangeButton = document.getElementById("prompt-change");
-    const speedPopupDecrease = document.getElementById("speed-popup-decrease");
-    const speedPopupIncrease = document.getElementById("speed-popup-increase");
 
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
@@ -589,14 +549,6 @@
         }
     };
 
-    function showSpeedPopup(popupElement, speed) {
-        popupElement.textContent = `${speed}`; // Changed here to only display speed value
-        popupElement.classList.add('show');
-        setTimeout(() => {
-            popupElement.classList.remove('show');
-        }, 2000); // Hide after 2 seconds
-    }
-
     typingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (isResponseGenerating) return;
@@ -610,12 +562,10 @@
 
     decreaseSpeedButton.addEventListener('click', () => {
         normalSpeed = Math.min(2000, normalSpeed + 100);
-        showSpeedPopup(speedPopupDecrease, normalSpeed);
     });
 
     increaseSpeedButton.addEventListener('click', () => {
         normalSpeed = Math.max(100, normalSpeed - 100);
-        showSpeedPopup(speedPopupIncrease, normalSpeed);
     });
 
     promptChangeButton.addEventListener('click', () => {
