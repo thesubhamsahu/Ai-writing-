@@ -117,7 +117,7 @@
             border-radius: 8px;
             padding: 0.5rem 1rem;
             width: calc(100%);
-            box-sizing: border-box;
+            box-sizing: box-sizing;
             min-height: 40px;
             transition: background-color 0.3s ease;
         }
@@ -590,7 +590,7 @@
     };
 
     function showSpeedPopup(popupElement, speed) {
-        popupElement.textContent = `Speed: ${speed}ms`;
+        popupElement.textContent = `${speed}`; // Changed here to only display speed value
         popupElement.classList.add('show');
         setTimeout(() => {
             popupElement.classList.remove('show');
