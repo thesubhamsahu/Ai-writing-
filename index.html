@@ -96,7 +96,7 @@
             border-radius: 8px;
             padding: 0.75rem 1rem;
             color: #fff;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color: 0.3s ease;
             word-break: break-word;
             width: calc(100%);
             box-sizing: border-box;
@@ -172,7 +172,8 @@
             background-color: #333;
             color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color: 0.3s ease;
+            position: relative; /* For positioning the popup */
         }
 
         .send-button:hover,
@@ -224,6 +225,29 @@
             width: 100%;
         }
 
+        /* Speed popup styles */
+        .speed-popup {
+            position: absolute;
+            bottom: 100%; /* Position above the button */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #555;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .speed-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
         /* Dark mode styles */
         @media (prefers-color-scheme: dark) {
             body {
@@ -271,6 +295,10 @@
             .blinking-cursor {
                 background-color: #fff;
             }
+             .speed-popup {
+                background-color: #555;
+                color: #fff;
+            }
         }
 
         /* Light mode styles */
@@ -314,6 +342,10 @@
             .blinking-cursor {
                 background-color: #000;
             }
+             .speed-popup {
+                background-color: #ccc;
+                color: #000;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/compromise@14.8.1/builds/compromise.min.js"></script>
@@ -326,11 +358,17 @@
 <div class="animation-container">
 </div>
 <form class="typing-form">
-    <button type="button" class="speed-control-button" id="decrease-speed">speed-</button>
+    <button type="button" class="speed-control-button" id="decrease-speed">
+        speed-
+        <div class="speed-popup" id="speed-popup-decrease"></div>
+    </button>
     <button type="button" class="prompt-change-button" id="prompt-change">Essay</button>
     <input type="text" class="typing-input" placeholder="Type a message..."/>
     <button type="submit" class="send-button">Send</button>
-    <button type="button" class="speed-control-button" id="increase-speed">speed+</button>
+    <button type="button" class="speed-control-button" id="increase-speed">
+        speed+
+        <div class="speed-popup" id="speed-popup-increase"></div>
+    </button>
 </form>
 <script>
     const typingForm = document.querySelector(".typing-form");
@@ -338,6 +376,8 @@
     const decreaseSpeedButton = document.getElementById("decrease-speed");
     const increaseSpeedButton = document.getElementById("increase-speed");
     const promptChangeButton = document.getElementById("prompt-change");
+    const speedPopupDecrease = document.getElementById("speed-popup-decrease");
+    const speedPopupIncrease = document.getElementById("speed-popup-increase");
 
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
@@ -549,6 +589,14 @@
         }
     };
 
+    function showSpeedPopup(popupElement, speed) {
+        popupElement.textContent = `Speed: ${speed}ms`;
+        popupElement.classList.add('show');
+        setTimeout(() => {
+            popupElement.classList.remove('show');
+        }, 2000); // Hide after 2 seconds
+    }
+
     typingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (isResponseGenerating) return;
@@ -562,10 +610,12 @@
 
     decreaseSpeedButton.addEventListener('click', () => {
         normalSpeed = Math.min(2000, normalSpeed + 100);
+        showSpeedPopup(speedPopupDecrease, normalSpeed);
     });
 
     increaseSpeedButton.addEventListener('click', () => {
         normalSpeed = Math.max(100, normalSpeed - 100);
+        showSpeedPopup(speedPopupIncrease, normalSpeed);
     });
 
     promptChangeButton.addEventListener('click', () => {
