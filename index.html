@@ -118,7 +118,7 @@
             border-radius: 8px;
             padding: 0.5rem 1rem;
             width: calc(100%);
-            box-sizing: box-sizing;
+            box-sizing: border-box;
             min-height: 40px;
             transition: background-color 0.3s ease;
         }
@@ -174,25 +174,7 @@
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
-            position: relative; /* Add position relative for indicator */
-            overflow: hidden; /* Clip indicator within the button bounds */
         }
-
-        .speed-button-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.2); /* Adjust fill color and opacity */
-            width: 0; /* Initial fill width */
-            transition: width 0.3s ease; /* Smooth width transition */
-        }
-
-        .speed-button-fill.minus {
-            left: auto;
-            right: 0;
-        }
-
 
         .send-button:hover,
         .speed-control-button:hover,
@@ -345,11 +327,11 @@
 <div class="animation-container">
 </div>
 <form class="typing-form">
-    <button type="button" class="speed-control-button" id="decrease-speed">speed-<div class="speed-button-fill minus"></div></button>
+    <button type="button" class="speed-control-button" id="decrease-speed">speed-</button>
     <button type="button" class="prompt-change-button" id="prompt-change">Essay</button>
     <input type="text" class="typing-input" placeholder="Type a message..."/>
     <button type="submit" class="send-button">Send</button>
-    <button type="button" class="speed-control-button" id="increase-speed">speed+<div class="speed-button-fill"></div></button>
+    <button type="button" class="speed-control-button" id="increase-speed">speed+</button>
 </form>
 <script>
     const typingForm = document.querySelector(".typing-form");
@@ -357,8 +339,6 @@
     const decreaseSpeedButton = document.getElementById("decrease-speed");
     const increaseSpeedButton = document.getElementById("increase-speed");
     const promptChangeButton = document.getElementById("prompt-change");
-    const decreaseSpeedFill = document.querySelector("#decrease-speed .speed-button-fill.minus");
-    const increaseSpeedFill = document.querySelector("#increase-speed .speed-button-fill");
 
     const API_KEY = "AIzaSyCH_a36UpmdGBrXFscwR4OGRJkH4MNNmpg";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
@@ -441,15 +421,6 @@
     let normalSpeed = 900;
     let displayInterval;
     let currentAnimationBox = null;
-    let speedLevel = 5; // Initial speed level (out of 10)
-
-    function updateSpeedButtonFill() {
-        const fillUnit = 10; // Each step is 10% of the fill
-        increaseSpeedFill.style.width = `${Math.max(0, speedLevel) * fillUnit}%`;
-        decreaseSpeedFill.style.width = `${Math.max(0, 10 - speedLevel) * fillUnit}%`; // Fill from right for decrease
-    }
-    updateSpeedButtonFill(); // Initialize fill on page load
-
 
     function animateMessageBox(displayBox, textArray) {
         let currentIndex = 0;
@@ -591,15 +562,11 @@
     });
 
     decreaseSpeedButton.addEventListener('click', () => {
-        speedLevel = Math.max(0, speedLevel - 1); // Ensure speedLevel doesn't go below 0
         normalSpeed = Math.min(2000, normalSpeed + 100);
-        updateSpeedButtonFill();
     });
 
     increaseSpeedButton.addEventListener('click', () => {
-        speedLevel = Math.min(10, speedLevel + 1); // Ensure speedLevel doesn't exceed 10
         normalSpeed = Math.max(100, normalSpeed - 100);
-        updateSpeedButtonFill();
     });
 
     promptChangeButton.addEventListener('click', () => {
