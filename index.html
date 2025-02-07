@@ -118,7 +118,7 @@
             border-radius: 8px;
             padding: 0.5rem 1rem;
             width: calc(100%);
-            box-sizing: border-box;
+            box-sizing: box-sizing;
             min-height: 40px;
             transition: background-color 0.3s ease;
         }
@@ -173,7 +173,7 @@
             background-color: #333;
             color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color: 0.3s ease;
         }
 
         .send-button:hover,
@@ -421,42 +421,28 @@
     let normalSpeed = 900;
     let displayInterval;
     let currentAnimationBox = null;
-    let wakeLockSentinel = null; // Variable to hold the wake lock sentinel
+    let wakeLockSentinel = null; // Variable to hold the wake lock
 
     async function animateMessageBox(displayBox, textArray) {
         let currentIndex = 0;
         let cursor = displayBox.querySelector(".blinking-cursor");
 
-        // Function to request wake lock
-        async function acquireWakeLock() {
-            if ('wakeLock' in navigator) {
-                try {
-                    wakeLockSentinel = await navigator.wakeLock.request('screen');
-                    wakeLockSentinel.addEventListener('release', () => {
-                        console.log('Wake Lock was released');
-                    });
-                    console.log('Wake Lock is active');
-                } catch (err) {
-                    console.error(`Wake Lock failed to acquire: ${err.name}, ${err.message}`);
-                    wakeLockSentinel = null; // Ensure sentinel is null if lock fails
-                }
-            } else {
-                console.log('Wake Lock API is not supported by this browser.');
+        // Request wake lock at the start of animation
+        if ('wakeLock' in navigator) {
+            try {
+                wakeLockSentinel = await navigator.wakeLock.request('screen');
+                console.log('Wake lock acquired!');
+                wakeLockSentinel.addEventListener('release', () => {
+                    console.log('Wake lock was released!');
+                });
+            } catch (err) {
+                console.error(`Wake Lock failed: ${err.name}, ${err.message}`);
+                wakeLockSentinel = null; // Ensure it's null if request fails
             }
+        } else {
+            console.log('Wake Lock API not supported.');
         }
 
-        // Function to release wake lock
-        function releaseWakeLock() {
-            if (wakeLockSentinel) {
-                wakeLockSentinel.release()
-                    .then(() => {
-                        wakeLockSentinel = null;
-                        console.log('Wake Lock was successfully released');
-                    });
-            }
-        }
-
-        await acquireWakeLock(); // Acquire wake lock before animation starts
 
         function displayText() {
             if (currentIndex < textArray.length) {
@@ -511,7 +497,15 @@
                     cursor.remove();
                 }
                 currentAnimationBox = null;
-                releaseWakeLock(); // Release wake lock after animation completes
+
+                // Release wake lock after animation completes
+                if (wakeLockSentinel) {
+                    wakeLockSentinel.release()
+                        .then(() => {
+                            console.log('Wake lock released after animation.');
+                            wakeLockSentinel = null;
+                        });
+                }
             }
         }
 
@@ -576,9 +570,6 @@
                 const cursor = currentAnimationBox.querySelector(".blinking-cursor");
                 if (cursor) {
                     cursor.remove();
-                }
-                if (wakeLockSentinel) { // Release wake lock even on error
-                    wakeLockSentinel.release().then(() => { wakeLockSentinel = null; });
                 }
             }
         } finally {
