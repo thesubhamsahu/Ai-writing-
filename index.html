@@ -421,10 +421,42 @@
     let normalSpeed = 900;
     let displayInterval;
     let currentAnimationBox = null;
+    let wakeLockSentinel = null; // Variable to hold the wake lock sentinel
 
-    function animateMessageBox(displayBox, textArray) {
+    async function animateMessageBox(displayBox, textArray) {
         let currentIndex = 0;
         let cursor = displayBox.querySelector(".blinking-cursor");
+
+        // Function to request wake lock
+        async function acquireWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    wakeLockSentinel = await navigator.wakeLock.request('screen');
+                    wakeLockSentinel.addEventListener('release', () => {
+                        console.log('Wake Lock was released');
+                    });
+                    console.log('Wake Lock is active');
+                } catch (err) {
+                    console.error(`Wake Lock failed to acquire: ${err.name}, ${err.message}`);
+                    wakeLockSentinel = null; // Ensure sentinel is null if lock fails
+                }
+            } else {
+                console.log('Wake Lock API is not supported by this browser.');
+            }
+        }
+
+        // Function to release wake lock
+        function releaseWakeLock() {
+            if (wakeLockSentinel) {
+                wakeLockSentinel.release()
+                    .then(() => {
+                        wakeLockSentinel = null;
+                        console.log('Wake Lock was successfully released');
+                    });
+            }
+        }
+
+        await acquireWakeLock(); // Acquire wake lock before animation starts
 
         function displayText() {
             if (currentIndex < textArray.length) {
@@ -479,6 +511,7 @@
                     cursor.remove();
                 }
                 currentAnimationBox = null;
+                releaseWakeLock(); // Release wake lock after animation completes
             }
         }
 
@@ -543,6 +576,9 @@
                 const cursor = currentAnimationBox.querySelector(".blinking-cursor");
                 if (cursor) {
                     cursor.remove();
+                }
+                if (wakeLockSentinel) { // Release wake lock even on error
+                    wakeLockSentinel.release().then(() => { wakeLockSentinel = null; });
                 }
             }
         } finally {
