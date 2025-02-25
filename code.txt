@@ -1,0 +1,20 @@
+{
+  "short_name": "AI Writing",
+  "name": "AI Writing Assistant",
+  "icons": [
+    {
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCEWyrREhIs5FYd6cN_PDcRRXcDSA9VaCrGQ&usqp=CAU",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCEWyrREhIs5FYd6cN_PDcRRXcDSA9VaCrGQ&usqp=CAU",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#1e1e1e"
+}
